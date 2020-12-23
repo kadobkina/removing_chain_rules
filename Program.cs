@@ -95,40 +95,13 @@ namespace ta13
 
             WriteLine("Грамматика после удаления цепных продукций  >>>");
 
-
-                  /*   
-              for (int i = 0; i < lines.Length; i++)
-                {
-                string line = lines[i];
-                string[] split_line = line.Split(' ');
-                //result_grammar[i] = split_line[0] + " ";
-                foreach (string c in split_line)
-                {
-                    if (nonterm.Contains(c))
-                    {
-                        chain[i] += c + " ";
-                    }
-                    else
-                    {
-                        result_grammar[i] += c + " ";
-                    }
-                }
-            }*/
             add_chain(0);
 
-            foreach (var c in chain)
-                WriteLine(c);
+            /*            foreach (var c in chain)      // проверка циклов
+                            WriteLine(c);*/
 
-/*            for (int i = 0; i < chain.Length; i++)
-            {
-                var split_chain = chain[i].Split(' ');
-                for (int j = 1; j < split_chain.Length; j++)
-                {
-                    string ch = split_chain[j];
-                }
-            }*/
 
-/*            for (int i = 0; i < chain.GetLength(0); i++)
+          /*    for (int i = 0; i < chain.GetLength(0); i++)
             {
                 for (int j = 1; j < chain.GetLength(1); j++)
                 {
@@ -147,6 +120,26 @@ namespace ta13
 
                 }
             }*/
+
+            for (int i = 0; i < chain.Length; i++)
+            {
+                var split_chain = chain[i].Split(' ');
+                for (int j = 1; j < split_chain.Length; j++)
+                {
+                    string el = split_chain[j];
+                    foreach (var gram in result_grammar)
+                    {
+                        if ((gram[0] + "").CompareTo(el) == 0)
+                        {
+                            var gr = gram.Split(' ');
+                            for (int k = 1; k < gr.Length; k++)
+                            {
+                                result_grammar[i] += gr[k] + " ";
+                            }
+                        }
+                    }
+                }
+            }
 
 
             foreach (var g in result_grammar)
