@@ -1,0 +1,7 @@
+C:\Users\kadob\source\repos\ta13\bin\Debug\ta13.exe.config
+C:\Users\kadob\source\repos\ta13\bin\Debug\ta13.exe
+C:\Users\kadob\source\repos\ta13\bin\Debug\ta13.pdb
+C:\Users\kadob\source\repos\ta13\obj\Debug\ta13.csprojAssemblyReference.cache
+C:\Users\kadob\source\repos\ta13\obj\Debug\ta13.csproj.CoreCompileInputs.cache
+C:\Users\kadob\source\repos\ta13\obj\Debug\ta13.exe
+C:\Users\kadob\source\repos\ta13\obj\Debug\ta13.pdb
