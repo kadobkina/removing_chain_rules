@@ -10,41 +10,81 @@ namespace ta13
 {
     class Program
     {
-        static void Main(string[] args)
+ 
+        const string path = "grammar.txt";
+        static string[] lines = new string[count_of_row(path)]; // строки грамматики из файла
+        static string[] nonterm = new string[count_of_row(path)]; // список нетерминалов
+        static string[] chain = new string[count_of_row(path)]; // список цепей
+        static string[] result_grammar = new string[count_of_row(path)]; //грамматика без цепных продукций
+
+
+        public static int count_of_row(string p)
         {
-            string path = "grammar.txt";
-            int ind = 0;
-            bool flag = true;
-
-            WriteLine("Исходная грамматика в файле ..bin/Debug/grammar.txt  >>>");
-
-            using (StreamReader sr = new StreamReader(path))
+            int count = 0;
+            using (StreamReader sr = new StreamReader(p))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    ind++;
+                    count++;
                 }
             }
-            string[] lines = new string[ind]; // строки грамматики из файла
-            string[] nonterm = new string[ind]; // список нетерминалов
-            string[,] chain = new string[ind, ind]; // список цепей
+            return count;
+        }
 
-            string[] result_grammar = new string[ind]; //грамматика без цепных продукций
+        public static void add_chain(int i)
+        {
+            string line = lines[i];
+            string[] split_line = line.Split(' ');
+            //result_grammar[i] = split_line[0] + " ";
+            foreach (string c in split_line)
+            {
+                if (nonterm.Contains(c))
+                {
+                    chain[i] += c + " ";
+                    for (int j = 0; j < lines.Length; j++)
+                    {
+                        string line2 = lines[j];
+                        if ((""+line2[0]).CompareTo(c) == 0)
+                        {
+                            add_chain(j);
+                            chain[i] += chain[j];
+                        }
+
+                    }
+                }
+                else
+                {
+                    result_grammar[i] += c + " ";
+                }
+            }
+
+            string[] split_chain = chain[i].Split(' ');
+            chain[i] = null;
+            var new_split_chain = split_chain.Distinct();
+            foreach (var c in new_split_chain)
+                chain[i] += c + " ";
+        }
+
+
+        static void Main(string[] args)
+        {
+
+            WriteLine("Исходная грамматика в файле ..bin/Debug/grammar.txt  >>>");
 
             // считываем файл построчно
             try
             {
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    ind = 0;
+                    int ind = 0;
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         WriteLine(line);
                         lines[ind] = line;
                         nonterm[ind] = ""+line[0];
-                        chain[ind, 0] = "" + line[0];
+                        chain[ind] = line[0] + " ";
                         ind++;
                     }
                 }
@@ -56,36 +96,46 @@ namespace ta13
             WriteLine("Грамматика после удаления цепных продукций  >>>");
 
 
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] split_line = null;
+                  /*   
+              for (int i = 0; i < lines.Length; i++)
+                {
                 string line = lines[i];
-                split_line = line.Split(' ');
+                string[] split_line = line.Split(' ');
                 //result_grammar[i] = split_line[0] + " ";
-                int ii = 1;
                 foreach (string c in split_line)
                 {
                     if (nonterm.Contains(c))
                     {
-                        chain[i, ii] = c;
-                        ii++;
-                        flag = false;
+                        chain[i] += c + " ";
                     }
                     else
                     {
                         result_grammar[i] += c + " ";
                     }
                 }
-            }
+            }*/
+            add_chain(0);
 
-            for (int i = 0; i < chain.GetLength(0); i++)
+            foreach (var c in chain)
+                WriteLine(c);
+
+/*            for (int i = 0; i < chain.Length; i++)
+            {
+                var split_chain = chain[i].Split(' ');
+                for (int j = 1; j < split_chain.Length; j++)
+                {
+                    string ch = split_chain[j];
+                }
+            }*/
+
+/*            for (int i = 0; i < chain.GetLength(0); i++)
             {
                 for (int j = 1; j < chain.GetLength(1); j++)
                 {
                     string el = chain[i, j];
                     foreach (var gram in result_grammar)
                     {
-                        if ((gram[0]+"").CompareTo(el) == 0)
+                        if ((gram[0] + "").CompareTo(el) == 0)
                         {
                             var gr = gram.Split(' ');
                             for (int k = 1; k < gr.Length; k++)
@@ -96,16 +146,8 @@ namespace ta13
                     }
 
                 }
-            }
+            }*/
 
-            /*            for (int i = 1; i < chain.GetLength(0); i++)
-                        {
-                            for (int j = 1; j < chain.GetLength(1); j++)
-                            {
-                                result_grammar[i] += chain[i, j] + " ";
-                            }
-
-                        }*/
 
             foreach (var g in result_grammar)
             {
